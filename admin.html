@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>অ্যাডমিন প্যানেল - সাবজেক্ট মার্কস এন্ট্রি</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 450px; box-sizing: border-box; }
+        h2 { text-align: center; color: #333; margin-top: 0; margin-bottom: 20px; }
+        label { font-weight: bold; color: #555; display: block; margin-top: 12px; }
+        input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; font-size: 15px; }
+        .subject-group { background: #f9f9f9; padding: 15px; border-radius: 5px; margin-top: 15px; border: 1px dashed #28a745; }
+        .subject-group h3 { margin: 0 0 10px 0; color: #28a745; font-size: 16px; text-align: center; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; margin-top: 20px; font-weight: bold; }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🛠️ অ্যাডমিন প্যানেল (বিষয়ভিত্তিক নম্বর)</h2>
+    <form id="resultForm">
+        <label for="studentName">শিক্ষার্থীর নাম (Student Name):</label>
+        <input type="text" id="studentName" placeholder="নাম লিখুন" required>
+
+        <label for="rollNumber">রোল নম্বর (Roll Number):</label>
+        <input type="text" id="rollNumber" placeholder="রোল নম্বর লিখুন" required>
+
+        <div class="subject-group">
+            <h3>📚 বিষয়ভিত্তিক নম্বরসমূহ (Marks Input)</h3>
+            
+            <label for="mathMarks">গণিত (Mathematics):</label>
+            <input type="number" id="mathMarks" placeholder="গণিতের নম্বর" min="0" max="100" required>
+
+            <label for="chemistryMarks">রসায়ন (Chemistry):</label>
+            <input type="number" id="chemistryMarks" placeholder="রসায়নের নম্বর" min="0" max="100" required>
+
+            <label for="islamMarks">ইসলাম শিক্ষা (Islam):</label>
+            <input type="number" id="islamMarks" placeholder="ইসলাম শিক্ষার নম্বর" min="0" max="100" required>
+
+            <label for="nutritionistMarks">পুষ্টিবিদ (Nutritionist):</label>
+            <input type="number" id="nutritionistMarks" placeholder="পুষ্টিবিদ সাবজেক্টের নম্বর" min="0" max="100" required>
+        </div>
+
+        <button type="submit">ডাটাবেজে সেভ করুন</button>
+    </form>
+</div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC72Zk7T4h9ZJJPR9WzlOAnd3G-5VpmhiI",
+    authDomain: "student-result-system-74c7d.firebaseapp.com",
+    projectId: "student-result-system-74c7d",
+    storageBucket: "student-result-system-74c7d.firebasestorage.app",
+    messagingSenderId: "669365756034",
+    appId: "1:669365756034:web:95b93ce15b72039921d49b",
+    measurementId: "G-QV7VZXV3YX"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const form = document.getElementById('resultForm');
+  form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const studentName = document.getElementById('studentName').value;
+      const rollNumber = document.getElementById('rollNumber').value.trim();
+      
+      const math = document.getElementById('mathMarks').value;
+      const chemistry = document.getElementById('chemistryMarks').value;
+      const islam = document.getElementById('islamMarks').value;
+      const nutritionist = document.getElementById('nutritionistMarks').value;
+
+      try {
+        await addDoc(collection(db, "students"), {
+          name: studentName,
+          roll: rollNumber,
+          subjects: {
+            math: math,
+            chemistry: chemistry,
+            islam: islam,
+            nutritionist: nutritionist
+          },
+          createdAt: new Date()
+        });
+        alert("ফলাফল সফলভাবে ক্লাউড ডাটাবেজে সেভ হয়েছে! 🎉");
+        form.reset();
+      } catch (error) {
+        console.error("Error saving data: ", error);
+        alert("উফ! ডাটা সেভ করতে সমস্যা হয়েছে।");
+      }
+  });
+</script>
+</body>
+              </html>
+              
