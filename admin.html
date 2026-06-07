@@ -17,32 +17,24 @@
     </style>
 </head>
 <body>
-
 <div class="container">
     <h2>🛠️ অ্যাডমিন প্যানেল (বিষয়ভিত্তিক নম্বর)</h2>
     <form id="resultForm">
-        <label for="studentName">শিক্ষার্থীর নাম (Student Name):</label>
+        <label for="studentName">শিক্ষार्थियों নাম (Student Name):</label>
         <input type="text" id="studentName" placeholder="নাম লিখুন" required>
-
         <label for="rollNumber">রোল নম্বর (Roll Number):</label>
         <input type="text" id="rollNumber" placeholder="রোল নম্বর লিখুন" required>
-
         <div class="subject-group">
-            <h3>📚 বিষয়ভিত্তিক নম্বরসমূহ (Marks Input)</h3>
-            
+            <h3>📚 বিষয়ভিত্তিক নম্বরসমূহ</h3>
             <label for="mathMarks">গণিত (Mathematics):</label>
             <input type="number" id="mathMarks" placeholder="গণিতের নম্বর" min="0" max="100" required>
-
             <label for="chemistryMarks">রসায়ন (Chemistry):</label>
             <input type="number" id="chemistryMarks" placeholder="রসায়নের নম্বর" min="0" max="100" required>
-
             <label for="islamMarks">ইসলাম শিক্ষা (Islam):</label>
             <input type="number" id="islamMarks" placeholder="ইসলাম শিক্ষার নম্বর" min="0" max="100" required>
-
             <label for="nutritionistMarks">পুষ্টিবিদ (Nutritionist):</label>
             <input type="number" id="nutritionistMarks" placeholder="পুষ্টিবিদ সাবজেক্টের নম্বর" min="0" max="100" required>
         </div>
-
         <button type="submit">ডাটাবেজে সেভ করুন</button>
     </form>
 </div>
@@ -67,10 +59,8 @@
   const form = document.getElementById('resultForm');
   form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
       const studentName = document.getElementById('studentName').value;
       const rollNumber = document.getElementById('rollNumber').value.trim();
-      
       const math = document.getElementById('mathMarks').value;
       const chemistry = document.getElementById('chemistryMarks').value;
       const islam = document.getElementById('islamMarks').value;
@@ -80,20 +70,12 @@
         await addDoc(collection(db, "students"), {
           name: studentName,
           roll: rollNumber,
-          subjects: {
-            math: math,
-            chemistry: chemistry,
-            islam: islam,
-            nutritionist: nutritionist
-          },
+          subjects: { math, chemistry, islam, nutritionist },
           createdAt: new Date()
         });
         alert("ফলাফল সফলভাবে ক্লাউড ডাটাবেজে সেভ হয়েছে! 🎉");
         form.reset();
-      } catch (error) {
-        console.error("Error saving data: ", error);
-        alert("উফ! ডাটা সেভ করতে সমস্যা হয়েছে।");
-      }
+      } catch (error) { alert("ডাটা সেভ করতে সমস্যা হয়েছে।"); }
   });
 </script>
 </body>
